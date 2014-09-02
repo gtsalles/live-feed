@@ -1,3 +1,5 @@
+
+
 import os
 from decouple import config
 from dj_database_url import parse as db_url
@@ -19,6 +21,7 @@ ALLOWED_HOSTS = ['live-feed.herokuapp.com']
 INSTALLED_APPS = (
     'south',
     'suit',
+    'haystack',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,3 +90,29 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.core.context_processors.request',
 )
+
+# Haystack
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': os.environ.get('BONSAI_URL', config('ES_URL', default='')),
+        'INDEX_NAME': 'livefeed',
+    },
+}
+
+
+# Celery
+
+BROKER_URL = os.environ.get('REDISCLOUD_URL', config('BROKER_URL', default=''))
+CELERY_RESULT_BACKEND = os.environ.get('REDISTOGO_URL', config('RESULT_STORE', default=''))
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Fortaleza'
+
+# Sendgrid
+
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+SENDGRID_USER = os.environ.get('SENDGRID_USERNAME', config('SENDGRID_USERNAME', default=''))
+SENDGRID_PASSWORD = os.environ.get('SENDGRID_PASSWORD', config('SENDGRID_PASSWORD', default=''))

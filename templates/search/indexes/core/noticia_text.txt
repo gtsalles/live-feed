@@ -1,0 +1,5 @@
+{{ object.titulo }}
+{{ object.subtitulo }}
+{{ object.texto }}
+{{ object.link }}
+{{ object.data_publicacao }}
