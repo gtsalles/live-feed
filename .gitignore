@@ -1,0 +1,4 @@
+.ropeproject/
+static/*
+*.pyc
+*.ini
