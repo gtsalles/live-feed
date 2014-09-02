@@ -3,3 +3,4 @@
 static/*
 *.pyc
 *.ini
+celerybeat-schedule

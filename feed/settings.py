@@ -108,10 +108,8 @@ HAYSTACK_CONNECTIONS = {
 
 BROKER_URL = os.environ.get('REDISCLOUD_URL', config('BROKER_URL', default=''))
 CELERY_RESULT_BACKEND = os.environ.get('REDISTOGO_URL', config('RESULT_STORE', default=''))
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Fortaleza'
+
 
 # Sendgrid
 

@@ -1,15 +1,32 @@
-from django.core.mail import send_mail
+from .models import Site, Url
+from .parser import parse_sitemap, parse_rss
+from celery.task import periodic_task, task
+from datetime import timedelta
 
-from feed.celery import app
-from .models import Site
 
-
-@app.task
+@periodic_task(run_every=timedelta(seconds=60), ignore_results=True)
 def get_sites():
-    for i in Site.objects.all():
-        print i
+    sites = Site.objects.filter(status=True)
+    get_sitemap.delay(sites.filter(tipo='sitemap'))
+    get_rss.delay(sites.filter(tipo='rss'))
 
 
-@app.task
-def send():
-    send_mail('assunto', from_email='gt.salles@gmail.com', message='MENSAGEM', recipient_list=['gt.salles@gmail.com'])
+@task
+def get_sitemap(qs):
+    for site in qs:
+        urls = parse_sitemap(site.start)
+        if urls:
+            create_urls.delay(urls)
+
+
+@task
+def get_rss(qs):
+    for site in qs:
+        urls = parse_rss(site.start)
+        create_urls.delay(urls)
+
+
+@task
+def create_urls(urls):
+    for url in urls:
+        Url.objects.get_or_create(url=url)

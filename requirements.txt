@@ -30,3 +30,5 @@ sendgrid==0.5.1
 sendgrid-django==1.0.3
 smtpapi==0.1.2
 django-haystack==2.2.0
+BeautifulSoup==3.2.1
+feedparser==5.1.3
