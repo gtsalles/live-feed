@@ -45,7 +45,8 @@ WSGI_APPLICATION = 'feed.wsgi.application'
 # Database
 
 DATABASES = {
-    'default': db_url(os.environ.get('DATABASE_URL', config('DB_URL')))
+    'default': db_url(os.environ.get('DATABASE_URL', config('DB_URL',
+                                                            default='')))
 }
 
 # Internationalization
