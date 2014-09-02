@@ -93,11 +93,23 @@ TEMPLATE_CONTEXT_PROCESSORS = TCP + (
 
 # Haystack
 
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+#         'URL': os.environ.get('BONSAI_URL', config('ES_URL', default='')),
+#         'INDEX_NAME': 'livefeed',
+#     },
+# }
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': os.environ.get('BONSAI_URL', config('ES_URL', default='')),
+        'URL': os.environ.get('ES_URL', config('ES_URL', default='')),
         'INDEX_NAME': 'livefeed',
+        'TIMEOUT': 60,
+        'KWARGS': {
+            'http_auth': os.environ.get('ES_AUTH')
+        }
     },
 }
 
