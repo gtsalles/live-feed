@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import os
 
 from celery import Celery
-import iron_celery
 
 from django.conf import settings
 
