@@ -18,6 +18,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'south',
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,3 +72,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 STATICFILES_DIRS = (os.path.join(MEDIA_ROOT, 'static'),)
+
+
+# Django Suit
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Live Feed',
+    'SEARCH_URL': '',
+}
