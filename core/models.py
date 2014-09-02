@@ -11,9 +11,9 @@ class Site(models.Model):
     nome = models.CharField(max_length=50)
     site = models.URLField()
     start = models.URLField()
-    tipo = models.CharField(max_length=2, choices=TIPO_CHOICES)
+    tipo = models.CharField(max_length=15, choices=TIPO_CHOICES)
     status = models.BooleanField(default=True)
-    formato_data = models.CharField(max_length=200, blank=True, null=True)
+    xpath_data = models.CharField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):
         return self.nome

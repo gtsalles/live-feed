@@ -11,7 +11,9 @@ admin.site.register(Noticia, NoticiaAdmin)
 
 
 class SiteAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('nome', 'site', 'start', 'tipo', 'status')
+    list_filter = ('tipo', 'status')
+    search_fields = ('nome', 'site')
 
 
 admin.site.register(Site, SiteAdmin)

@@ -8,7 +8,6 @@ celery==3.1.13
 django-celery==3.1.10
 django-haystack==2.2.0
 elasticsearch==1.2.0
-haystack==0.15
 kombu==3.0.21
 psycopg2==2.5.4
 python-decouple==2.3
