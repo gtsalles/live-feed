@@ -1,1 +1,1 @@
-worker: celery -A feed worker -B -l info
+web: waitress-serve --port=$PORT feed.wsgi:application

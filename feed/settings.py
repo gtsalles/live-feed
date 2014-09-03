@@ -17,7 +17,6 @@ ALLOWED_HOSTS = ['live-feed.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = (
-    'south',
     'suit',
     'haystack',
     'django.contrib.admin',
@@ -34,6 +33,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -46,8 +46,7 @@ WSGI_APPLICATION = 'feed.wsgi.application'
 # Database
 
 DATABASES = {
-    'default': db_url(os.environ.get('DATABASE_URL', config('DB_URL',
-                                                            default='')))
+    'default': db_url(os.environ.get('DATABASE_URL', config('DB_URL', default='')))
 }
 
 # Internationalization

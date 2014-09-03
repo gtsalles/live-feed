@@ -2,9 +2,9 @@ from django.db import models
 
 
 TIPO_CHOICES = (
-    ('sitemap', 'Sitemap'),
-    ('rss', 'RSS'),
-    ('outro', 'Outro'),
+    (u'sitemap', u'Sitemap'),
+    (u'rss', u'RSS'),
+    (u'outro', u'Outro'),
 )
 
 
@@ -36,7 +36,7 @@ class Noticia(models.Model):
 
 
 class Url(models.Model):
-    url = models.URLField(unique=True)
+    url = models.URLField(unique=True, max_length=400)
     status_processamento = models.BooleanField(default=False)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
