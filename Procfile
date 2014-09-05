@@ -1,1 +1,1 @@
-worker: flower --port=$PORT -A feed
+web: flower --port=$PORT -A feed
