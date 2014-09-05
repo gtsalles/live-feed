@@ -48,7 +48,8 @@ def parse_url(url):
 @task
 def insere_noticia(doc):
     try:
-        Noticia.objects.create(**doc)
+        if doc:
+            Noticia.objects.create(**doc)
     except IntegrityError:
         from django.db import connection
         connection._rollback()
