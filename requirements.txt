@@ -49,4 +49,3 @@ w3lib==1.10.0
 waitress==0.8.9
 wsgiref==0.1.2
 zope.interface==4.1.1
-flower==0.7.2

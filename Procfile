@@ -1,1 +1,1 @@
-web: flower --port=$PORT -A feed
+web: waitress-serve --port=$PORT feed.wsgi:application
