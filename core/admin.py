@@ -4,7 +4,8 @@ from .models import Noticia, Site, Url
 
 
 class NoticiaAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('titulo', 'site', 'data_publicacao')
+    list_filter = ('site',)
 
 
 admin.site.register(Noticia, NoticiaAdmin)
