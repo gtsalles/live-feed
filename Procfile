@@ -1,1 +1,1 @@
-worker: celery -A feed worker -B -l info -n four
+worker: flower --port=$PORT -A feed
