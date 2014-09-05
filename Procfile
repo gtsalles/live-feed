@@ -1,1 +1,1 @@
-worker: celery -A feed worker -B -l info -n one
+worker: celery -A feed worker -B -l info -n two
