@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 TIPO_CHOICES = (
@@ -21,11 +23,11 @@ class Site(models.Model):
 
 
 class Noticia(models.Model):
-    titulo = models.CharField(max_length=150, db_index=True)
+    titulo = models.CharField(max_length=150)
     subtitulo = models.CharField(max_length=200, blank=True, null=True)
     imagem = models.TextField(blank=True, null=True)
     texto = models.TextField()
-    site = models.ForeignKey('Site')
+    site = models.CharField(max_length=100)
     url = models.ForeignKey('Url', db_index=True, unique=True)
 
     data_insercao = models.DateTimeField(auto_now_add=True)
@@ -35,13 +37,20 @@ class Noticia(models.Model):
         return self.titulo
 
 
+@receiver(post_save, sender=Noticia)
+def noticia_post_save(instance, **kwargs):
+    url = instance.url
+    url.status_processamento = True
+    url.save()
+
+
 class Url(models.Model):
     url = models.URLField(unique=True, max_length=400)
     status_processamento = models.BooleanField(default=False)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.link
+        return self.url
 
     class Meta:
         ordering = ['-data_criacao']

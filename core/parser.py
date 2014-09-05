@@ -1,6 +1,14 @@
+from __future__ import unicode_literals
+from urlparse import urlparse
+
 from BeautifulSoup import BeautifulStoneSoup
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 import requests
 import feedparser
+from readability.readability import Document
+from scrapy import Selector
+from .models import Site, Url
 
 
 def request(url):
@@ -34,49 +42,51 @@ def parse_html(url):
     if not response:
         return response
 
-class HtmlExtractor():
+    document = Document(response.content)
+    doc = {
+        'titulo': document.short_title(),
+        'texto': document.summary(),
+        'site': urlparse(url).netloc,
+        'url': get_object_or_404(Url, url=url),
+        'data_publicacao': get_data(response.content, urlparse(url).netloc),
+        'imagem': get_image(response.content, urlparse(url).netloc)
+    }
+    return doc
 
-    url = html = url_parsed = page_content = site = None
 
-    def __init__(self, url):
-        self.url = url
-        self.url_parsed = requests.get(self.url, timeout=15)
+def get_data(html, site):
+    import dateutil.parser
 
-    def main(self):
-        self.html = self.url_parsed.content
-        page_content = Document(self.html)
-        article = page_content.summary()
-        title = page_content.short_title().encode('utf-8')
-        site = urlparse(self.url_parsed.url).netloc
-        html = self.url_parsed.text
-        return {'texto': article, 'titulo': title, 'subtitulo': self.get_subtitle(article),
-                'foto': self.get_image(article), 'site': site, 'link': self.url_parsed.url,
-                'html': html, 'data_publicacao': self.get_publish_date(html)}
+    hxs = Selector(text=html)
 
-    def get_publish_date(self, html):
-        hxs = Selector(text=html)
-        import dateutil.parser
+    if '180graus.com' in site:
+        out = hxs.xpath('//div[@class="data"]/text()').extract()
+        data = out[0].split(' - ')[-1].split(' ')
+        o = data[0] + ' ' + data[-1]
+        return dateutil.parser.parse(o, dayfirst=True, ignoretz=True)
 
-        metas_tags = ['@property="article:published_time"', '@name="date"', '@itemprop="dateModified"']
-        for i in metas_tags:
-            out = hxs.xpath('//meta[%s]/@content' % i).extract()
-            if len(out) > 0:
-                return dateutil.parser.parse(out[0])
+    metas_tags = ['@property="article:published_time"', '@name="date"', '@itemprop="dateModified"',
+                  '@name="shareaholic:article_published_time"']
+    for i in metas_tags:
+        out = hxs.xpath('//meta[%s]/@content' % i).extract()
+        if len(out) > 0:
+            return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+    extra_tags = ['//abbr[@class="date"]/@title', '//abbr[@class="published"]/text()',
+                  '//div[@class="materia-data"]/p/text()', '//time/text()', '//p[@class="post-date"]/text()',
+                  '//*[@class="data"]/text()', '//small[@class="autor bloco"]/*/text()']
+    for i in extra_tags:
+        out = hxs.xpath('%s' % i).extract()
+        if len(out) > 0:
+            return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+    return timezone.now()
 
+
+def get_image(article, site):
+    hxs = Selector(text=article)
+    try:
+        image = hxs.xpath('//img/@src').extract()[0]
+        if image[0] == '/':
+            image = site + '/' + image
+        return image
+    except IndexError:
         return None
-
-    def get_subtitle(self, article):
-        hxs = Selector(text=article)
-        if len(hxs.xpath('//p/text()').extract()[0]) < 200:
-            return hxs.xpath('//p/text()').extract()[1]
-        return hxs.xpath('//p/text()').extract()[0]
-
-    def get_image(self, article):
-        hxs = Selector(text=article)
-        try:
-            image = hxs.xpath('//img/@src').extract()[0]
-            if image[0] == '/':
-                image = self.site + '/' + image
-            return image
-        except IndexError:
-            return None

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Noticia, Site
+from .models import Noticia, Site, Url
 
 
 class NoticiaAdmin(admin.ModelAdmin):
@@ -18,3 +18,10 @@ class SiteAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Site, SiteAdmin)
+
+
+class UrlAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Url, UrlAdmin)
