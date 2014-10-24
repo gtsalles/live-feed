@@ -3,4 +3,6 @@
 static/*
 *.pyc
 *.ini
+*.sh
 celerybeat-schedule
+logs/
