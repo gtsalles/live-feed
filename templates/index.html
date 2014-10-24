@@ -17,10 +17,6 @@
 </div>
 {% endblock %}
 
-{% block extracss %}
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-{% endblock %}
-
 {% block extrajs %}
     <script type="text/html" id="noticia-template">
         <div class="row noticia">
@@ -37,26 +33,6 @@
             </div>
         </div>
         <hr/>
-    </script>
-
-    <script type="text/html" id="pagination-template">
-        <ul class="pagination pages">
-            <% if (currentPage != 1) { %>
-               <li class="arrow"><<button class="prev btn-default btn">◀</button></li>
-            <% } %>
-
-            <% for(p=1; p<=totalPages; p++) { %>
-                <% if (currentPage == p) { %>
-                    <li class="active"><button class="btn btn-default page"><%= p %></button></li>
-                <% } else { %>
-                    <li><button class="btn btn-default page"><%= p %></button></li>
-                <% } %>
-            <% } %>
-
-            <% if (lastPage != currentPage && lastPage != 0) { %>
-                <li class="arrow"><button class="btn btn-default next">▶</button></li>
-            <% } %>
-        </ul>
     </script>
 
     <script type="text/html" id="noticias-pagination">
