@@ -19,6 +19,8 @@ ALLOWED_HOSTS = ['live-feed.herokuapp.com']
 INSTALLED_APPS = (
     'suit',
     'haystack',
+    'djcelery',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -104,6 +106,8 @@ HAYSTACK_CONNECTIONS = {
 
 
 # Celery
+import djcelery
+djcelery.setup_loader()
 
 BROKER_URL = os.environ.get('REDISCLOUD_URL', config('BROKER_URL', default=''))
 CELERY_RESULT_BACKEND = os.environ.get('REDISTOGO_URL', config('RESULT_STORE', default=''))
@@ -115,3 +119,12 @@ CELERY_TIMEZONE = 'America/Fortaleza'
 EMAIL_BACKEND = 'sgbackend.SendGridBackend'
 SENDGRID_USER = os.environ.get('SENDGRID_USERNAME', config('SENDGRID_USERNAME', default=''))
 SENDGRID_PASSWORD = os.environ.get('SENDGRID_PASSWORD', config('SENDGRID_PASSWORD', default=''))
+
+
+# Django Rest Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}

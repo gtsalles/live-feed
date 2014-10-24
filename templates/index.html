@@ -5,49 +5,12 @@
 {% block content %}
 <div class="container-fluid">
     <div class="col-sm-12">
-        {% for noticia in object_list %}
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ noticia.titulo }}</h2>
-                    <div class="texto" style="margin-bottom: 15px">
-                        {{ noticia.texto|striptags|truncatewords_html:60 }}
-                    </div>
-                    <p class="lead"><a href="{{ noticia.url.url }}" target="_blank" class="btn btn-default">Ver no site</a></p>
-                    <ul class="list-inline">
-                        <li><a href="{{ noticia.site }}">{{ noticia.site }}</a></li>
-                        <li>{{ noticia.data_publicacao }}</li>
-                    </ul>
-                </div>
-            </div>
-            <hr/>
-        {% endfor %}
+        <div class="noticias" id="paginated-content"></div>
     </div>
 
     <div class="row text-center">
         <div class="col-sm-12">
-            <ul class="pagination pages">
-                {% if page_obj.has_previous %}
-                    <li class="arrow"><a href="?page={{ page_obj.previous_page_number }}">◀</a></li>
-                {% else %}
-                    <li class="arrow unavailable"><a href="#">◀</a></li>
-                {% endif %}
-
-                {% for page in page_obj.paginator.page_range %}
-                    {% ifequal page page_obj.number %}
-                        <li><a href="?page={{ page }}{% if q %}&q={{ q }}{% endif %}" class="current">{{ page }}</a></li>
-                    {% else %}
-                        {% if page <= page_obj.number|add:2 and page >= page_obj.number|add:-2 %}
-                            <li><a href="?page={{ page }}{% if q %}&q={{ q }}{% endif %}">{{ page }}</a></li>
-                        {% endif %}
-                    {% endifequal %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <li class="arrow"><a href="?page={{ page_obj.next_page_number }}">▶</a></li>
-                {% else %}
-                    <li class="arrow unavailable"><a href="#">▶</a></li>
-                {% endif %}
-            </ul>
+            <div class="paginacao" id="pagination"></div>
         </div>
     </div>
 
@@ -56,4 +19,69 @@
 
 {% block extracss %}
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extrajs %}
+    <script type="text/html" id="noticia-template">
+        <div class="row noticia">
+            <div class="col-xs-12">
+                <h2><%= titulo %></h2>
+                <div class="texto" style="margin-bottom: 15px">
+                    <%- texto %>
+                </div>
+                <p class="lead"><a href="<%= link %>" target="_blank" class="btn btn-default">Ver no site</a></p>
+                <ul class="list-inline">
+                    <li><a href="<%= site %>"><%= site %></a></li>
+                    <li><%= data_publicacao %></li>
+                </ul>
+            </div>
+        </div>
+        <hr/>
+    </script>
+
+    <script type="text/html" id="pagination-template">
+        <ul class="pagination pages">
+            <% if (currentPage != 1) { %>
+               <li class="arrow"><<button class="prev btn-default btn">◀</button></li>
+            <% } %>
+
+            <% for(p=1; p<=totalPages; p++) { %>
+                <% if (currentPage == p) { %>
+                    <li class="active"><button class="btn btn-default page"><%= p %></button></li>
+                <% } else { %>
+                    <li><button class="btn btn-default page"><%= p %></button></li>
+                <% } %>
+            <% } %>
+
+            <% if (lastPage != currentPage && lastPage != 0) { %>
+                <li class="arrow"><button class="btn btn-default next">▶</button></li>
+            <% } %>
+        </ul>
+    </script>
+
+    <script type="text/html" id="noticias-pagination">
+        <ul class="pagination pages">
+            <% if (currentPage != 1) { %>
+               <li class="arrow"><button class="prev btn-default btn">◀</button></li>
+            <% } else { %>
+               <li class="arrow"><button class="disabled prev btn-default btn">◀</button></li>
+            <% } %>
+
+            <% for(p=1; p<=totalPages; p++) { %>
+                <% if (currentPage == p) { %>
+                    <li><button class="active page btn btn-default"><%= p %></button></li>
+                <% } else { %>
+                    <% if ((p <= currentPage + 3) && (p >= currentPage - 3)) { %>
+                        <li><button class="page btn btn-default"><%= p %></button></li>
+                    <% } %>
+                <% } %>
+            <% } %>
+
+            <% if (lastPage != currentPage && lastPage != 0) { %>
+                <li class="arrow"><button class="btn btn-default next">▶</button></li>
+            <% } else { %>
+                <li class="arrow"><button class="disabled prev btn-default btn">▶</button></li>
+            <% } %>
+        </ul>
+    </script>
 {% endblock %}
