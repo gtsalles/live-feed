@@ -42,14 +42,14 @@ def get_noticias():
 @task
 def parse_url(url):
     doc = parse_html(url)
-    insere_noticia(doc)
+    if doc:
+        insere_noticia.delay(doc)
 
 
 @task
 def insere_noticia(doc):
     try:
-        if doc:
-            Noticia.objects.create(**doc)
+        Noticia.objects.create(**doc)
     except IntegrityError:
         from django.db import connection
         connection._rollback()
