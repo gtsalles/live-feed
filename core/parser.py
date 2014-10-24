@@ -69,15 +69,21 @@ def get_data(html, site):
                   '@name="shareaholic:article_published_time"']
     for i in metas_tags:
         out = hxs.xpath('//meta[%s]/@content' % i).extract()
-        if len(out) > 0:
-            return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+        try:
+            if len(out) > 0:
+                return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+        except TypeError:
+            pass
     extra_tags = ['//abbr[@class="date"]/@title', '//abbr[@class="published"]/text()',
                   '//div[@class="materia-data"]/p/text()', '//time/text()', '//p[@class="post-date"]/text()',
                   '//*[@class="data"]/text()', '//small[@class="autor bloco"]/*/text()']
     for i in extra_tags:
         out = hxs.xpath('%s' % i).extract()
-        if len(out) > 0:
-            return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+        try:
+            if len(out) > 0:
+                return dateutil.parser.parse(out[0], dayfirst=True, ignoretz=True)
+        except TypeError:
+            pass
     return timezone.now()
 
 
