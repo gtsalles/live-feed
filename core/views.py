@@ -1,17 +1,13 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView
+from rest_framework import viewsets
 from core.models import Url, Noticia
+from core.serializers import NoticiaSerializer
 
 
-class NoticiasList(ListView):
-    model = Noticia
-    paginate_by = 10
-    template_name = 'index.html'
-
-    def get_queryset(self):
-        return self.model.objects.all().order_by('-data_publicacao')
+def home(request):
+    return render(request, 'index.html')
 
 
 def stats(request):
@@ -24,3 +20,9 @@ def stats(request):
 
 def monitor(request):
     return render(request, 'monitor.html')
+
+
+class NoticiaViewSet(viewsets.ModelViewSet):
+    queryset = Noticia.objects.order_by('-data_publicacao')
+    serializer_class = NoticiaSerializer
+    paginate_by = 10
