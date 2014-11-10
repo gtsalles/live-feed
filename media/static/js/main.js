@@ -50,7 +50,8 @@ app.views.PaginatedView = Backbone.View.extend({
     events: {
         'click button.prev': 'gotoPrev',
         'click button.next': 'gotoNext',
-        'click button.page': 'gotoPage'
+        'click button.page': 'gotoPage',
+        'click button.refresh': 'refresh',
     },
 
     initialize: function () {
@@ -75,6 +76,11 @@ app.views.PaginatedView = Backbone.View.extend({
         e.preventDefault();
         $('#paginated-content').spin();
         this.collection.requestNextPage();
+    },
+
+    refresh: function(e) {
+        e.preventDefault();
+        this.collection.goTo(1);
     },
 
     gotoPage: function (e) {
@@ -109,4 +115,11 @@ $(function(){
     app.collections.paginatedItems = new app.collections.PaginatedCollection();
     app.views.app = new app.views.AppView({collection: app.collections.paginatedItems});
     app.views.pagination = new app.views.PaginatedView({collection:app.collections.paginatedItems});
+    $('#refresh').on('click', function() {
+        $('#refresh-hide').click();
+    });
+//    setInterval(function() {
+//        $('#refresh-hide').click();
+//        console.log('aqui');
+//    }, 5000);
 });

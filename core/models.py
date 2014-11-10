@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 TIPO_CHOICES = (
@@ -31,7 +32,7 @@ class Noticia(models.Model):
     url = models.ForeignKey('Url', db_index=True, unique=True)
 
     data_insercao = models.DateTimeField(auto_now_add=True)
-    data_publicacao = models.DateTimeField(blank=True, null=True)
+    data_publicacao = models.DateTimeField(blank=True, null=True, default=timezone.now())
 
     def __unicode__(self):
         return self.titulo
