@@ -1,5 +1,5 @@
 BeautifulSoup==3.2.1
-Django==1.7.1
+Django==1.11.23
 Pillow==2.6.0
 PyYAML==3.11
 Scrapy==0.24.4
