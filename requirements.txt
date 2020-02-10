@@ -42,7 +42,7 @@ jieba==0.34
 kombu==3.0.21
 lxml==3.3.6
 psycopg2==2.5.4
-pyOpenSSL==0.14
+pyOpenSSL==17.5.0
 pycparser==2.10
 pylibmc==1.3.0
 python-dateutil==2.2
