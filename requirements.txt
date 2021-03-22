@@ -40,7 +40,7 @@ httpie==1.0.3
 ipython==2.2.0
 jieba==0.34
 kombu==3.0.21
-lxml==3.3.6
+lxml==4.6.3
 psycopg2==2.5.4
 pyOpenSSL==17.5.0
 pycparser==2.10
