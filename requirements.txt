@@ -2,7 +2,7 @@ BeautifulSoup==3.2.1
 Django==1.11.29
 Pillow==6.2.0
 PyYAML==5.1
-Scrapy==0.24.4
+Scrapy==1.8.1
 South==1.0
 Twisted==19.7.0
 amqp==1.4.6
