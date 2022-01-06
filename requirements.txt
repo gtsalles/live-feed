@@ -13,7 +13,7 @@ backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==3.3.0.18
 boto==2.33.0
-celery==3.1.13
+celery==5.2.2
 certifi==14.05.14
 cffi==0.8.6
 chardet==2.2.1
